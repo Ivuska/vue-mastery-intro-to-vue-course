@@ -21,6 +21,10 @@ body {
   cursor: pointer;
 }
 
+.remove {
+  background-color: red;
+}
+
 .cart {
   margin: 25px 100px;
   float: right;

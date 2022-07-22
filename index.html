@@ -6,14 +6,55 @@
     <!-- Import Styles -->
     <link rel="stylesheet" href="./assets/styles.css" />
     <!-- Import Vue.js -->
-    <script src="https://unpkg.com/vue@3.0.0-beta.12/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
   </head>
   <body>
     <div id="app">
-      <h1>Product goes here</h1>
+      <div class="nav-bar"></div>
+      <div class="cart"> Cart({{ cart }})</div>
+
+        <div class="product-display">
+          <div class="product-container">
+            <div class="product-image">
+              <!-- Dynamically bind an attribute to an expression. -->
+              <!-- ":" is a shorcut for "v-bind:".  -->
+              <!-- Can be used also for "href", "alt", "style", dynamic "class" etc.  -->
+              <!-- Src attribute bound to the image data. -->
+              <!-- I use kebab syntax in :class because I need to set CSS property with CSS syntax.-->
+              <img :src="image" alt="" :class="{ 'out-of-stock-img': !inStock }"> 
+              
+            </div>
+            <div class="product-info">
+              <h1 >{{ title }}</h1>
+              <p v-if="onSale">{{ saleMessage }}</p>
+              <!-- I can also use "v-show" if the condition is valid to show the proper text. -->
+              <p v-if="inStock > 10">In Stock</p>
+              <p v-else-if="inStock <= 10 && inStock > 0">Almost sold out!</p>
+              <p v-else>Out of Stock</p>
+              <p v-show="onSale">On Sale</p>
+              <ul>
+                <li v-for="detail in details">{{ detail }}</li>
+              </ul>
+              <!--Object in :style is JS so it has JS syntax even though it is a CSS property name.-->
+              <div v-for="(variant, index) in variants" :key="variant.id" @mouseover="updateVariant(index)" class="color-circle" :style="{ backgroundColor: variant.color }"></div>
+               <!-- "@click" is a shortcut for "v-on:click" . -->
+              <button class="button" :class="{ disabledButton: !inStock }" @click="addToCart" :disabled="!inStock">Add to Cart</button>
+              <!-- ":class" is active class . -->
+              <button class="button remove" :class="{ disabledButton: !inStock }" @click="removeFromCart" :disabled="!inStock" >Remove Item</button>
+              <ul>
+                <li v-for="size in sizes">{{ size }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
     </div>
 
-    <!-- Import Js -->
+    <!-- Import App -->
     <script src="./main.js"></script>
+
+    <!--Mount App-->
+    <script>
+      const mountedApp = app.mount("#app");
+    </script>
   </body>
 </html>
